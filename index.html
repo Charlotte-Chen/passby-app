@@ -1,0 +1,12 @@
+<!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>我經過了｜身邊的文化資產</title><meta name="theme-color" content="#7a4b2a">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.svg"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css"></head><body>
+<header><h1>我經過了</h1><button id="locBtn">📍 重新定位</button></header>
+<div id="status">正在取得你的位置…</div>
+<div id="fallback" hidden><select id="city"><option value="">選擇城市…</option></select><span>或直接點地圖選位置</span></div>
+<div id="map"></div><main id="list"></main>
+<footer>資料來源：文化部文化資產局開放資料（政府資料開放授權條款第1版）。位置只在本機計算，不會上傳。</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script></body></html>

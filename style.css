@@ -1,0 +1,9 @@
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"PingFang TC","Noto Sans TC",sans-serif;background:#faf6f0;color:#2b2118;font-size:17px;line-height:1.7}
+header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));background:#7a4b2a;color:#fff}h1{font-size:20px;margin:0}
+button{font:inherit;border:0;border-radius:20px;padding:6px 14px;background:#f2d8b8;color:#4a2c14}
+#status{padding:6px 14px;font-size:14px;color:#6b5848}#fallback{padding:4px 14px;font-size:14px}#fallback select{font:inherit;margin-right:8px}
+#map{height:38vh;min-height:220px}main{padding:10px}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px #0002}
+.card h2{margin:0;font-size:19px}.meta{font-size:13px;color:#8a7461}.card h3{font-size:15px;margin:10px 0 2px;color:#7a4b2a}.card p{margin:0;white-space:pre-line}
+.play{margin-top:10px;width:100%;padding:10px;font-size:17px}.play.on{background:#7a4b2a;color:#fff}
+footer{font-size:12px;color:#8a7461;padding:10px 14px 30px}a{color:#7a4b2a}
