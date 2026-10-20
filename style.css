@@ -59,7 +59,3 @@ dialog::backdrop{background:#23302a66}dialog h2{font:20px var(--round);color:var
 dialog label{display:block;font:600 14px var(--sans);color:var(--green);margin-bottom:14px}dialog select{width:100%;margin-top:6px}
 dialog input[type=range]{width:100%;accent-color:var(--green)}.tip{font-size:13px;color:var(--muted);background:#fff;border:1px dashed var(--line);padding:8px 10px}
 .dlgbtns{display:flex;gap:10px}.dlgbtns button{flex:1;margin:0;letter-spacing:.1em;font-size:16px;padding:10px}
-.lang{font:600 13px var(--mono);border:1.5px solid var(--green);color:var(--green);background:#fff;border-radius:3px;padding:3px 8px;cursor:pointer}
-.zhname{display:block;font:13px var(--sans);color:var(--muted)}
-.mtn{font:500 10px var(--mono);letter-spacing:.05em;color:var(--muted);border:1px solid var(--line);padding:0 5px;border-radius:2px;text-transform:none}
-.mtn.zh{color:var(--red);border-color:var(--red)}

@@ -36,6 +36,3 @@ app.js 會載入所有國家檔並一起算最近距離。
 | data/tw-attractions.json | 觀光景點 | 觀光署 觀光資訊資料庫 Attraction-json.zip（data.gov.tw/dataset/7777） |
 | data/tw-placenames.json | 地名 | 內政部地政司 臺灣地區地名資料 |
 各檔逐一非同步載入，載入一檔就更新地圖與清單。
-
-## English mode
-Header 中/EN toggle (localStorage `lang`). EN loads `data/en/<file>.json` only when active: names = official English (museums `name_eng`), official romanization (place names `ChinesePhonetic`), else Hanyu Pinyin via `tools/build_en.py` (pypinyin+jieba). Descriptions stay in Chinese (marked) — offline MT (argos-translate, opus-mt-zh-en) was tested and rejected for inaccurate/hallucinated output. Speech reads the Chinese text.
