@@ -1,5 +1,5 @@
 # 我經過了｜身邊的文化資產（PWA）
-靜態網站，無後端。打開即用瀏覽器定位（只在本機計算），列出最近 5 處文化資產＋地圖（Leaflet/OSM）＋文字卡片，每張卡片可用 Web Speech API（zh-TW）朗讀卡片上同樣的文字。定位被拒時可選城市或點地圖。
+靜態網站，無後端。打開即用瀏覽器定位（只在本機計算），列出最近 10 處文化資產＋地圖（Leaflet/OSM）＋文字卡片，每張卡片可用 Web Speech API（zh-TW）朗讀卡片上同樣的文字。定位被拒時可選城市或點地圖。
 
 ## 檔案
 - index.html / style.css / app.js / sw.js / manifest.webmanifest / icon.svg
