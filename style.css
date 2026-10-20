@@ -49,3 +49,13 @@ select{flex:1;font:16px var(--sans);padding:10px;border-radius:3px;border:1.5px 
 .play.on{background:var(--green);color:#fff}
 footer{border-top:3px double var(--green);color:var(--muted);padding:22px 20px 40px;font-size:13px;margin-top:20px;background:var(--paper)}footer h2{font:17px var(--round);color:var(--green);margin:0 0 6px}
 @media(min-width:760px){.ticket,.mapwrap,.results{max-width:760px;margin-left:auto;margin-right:auto}}
+.top .info{background:none;border:0;cursor:pointer;padding:0 2px}
+.playrow{display:flex;gap:8px;margin-top:12px}.playrow .play{margin-top:0;flex:1}
+.stop{font:15px var(--round);border:1.5px solid var(--red);background:#fff;color:var(--red);border-radius:999px;padding:10px 16px}
+.reading{margin-top:12px;background:#fff7d6;border-left:4px solid var(--mustard);padding:8px 10px;font-size:15px;line-height:1.6}
+.rd-n{font:500 11px var(--mono);color:var(--muted);margin-right:8px}
+dialog{border:1.5px solid var(--green);border-radius:4px;background:#fbf7e9;padding:18px;width:min(92vw,420px);box-shadow:5px 5px 0 var(--green)}
+dialog::backdrop{background:#23302a66}dialog h2{font:20px var(--round);color:var(--green);margin:0 0 12px}
+dialog label{display:block;font:600 14px var(--sans);color:var(--green);margin-bottom:14px}dialog select{width:100%;margin-top:6px}
+dialog input[type=range]{width:100%;accent-color:var(--green)}.tip{font-size:13px;color:var(--muted);background:#fff;border:1px dashed var(--line);padding:8px 10px}
+.dlgbtns{display:flex;gap:10px}.dlgbtns button{flex:1;margin:0;letter-spacing:.1em;font-size:16px;padding:10px}
