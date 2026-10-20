@@ -2,7 +2,10 @@ const CITIES={'臺北市':[25.0375,121.5637],'新北市':[25.0120,121.4657],'基
 const N=5;let places=[],map,meMarker,layer;
 // 距離（公尺），haversine，全部在裝置上計算
 function dist(a,b,c,d){const R=6371e3,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,h=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
-function nearest(lat,lng,n=N,list=places){return list.map(p=>({...p,d:dist(lat,lng,p.lat,p.lng)})).sort((a,b)=>a.d-b.d).slice(0,n)}
+const PRI=p=>p.category==='觀光景點'?2:p.category==='地名'?3:1;
+function nearest(lat,lng,n=N,list=places){const s=list.map(p=>({...p,d:dist(lat,lng,p.lat,p.lng)})).sort((a,b)=>a.d-b.d).slice(0,n*6);const out=[];
+  for(const p of s){const j=out.findIndex(q=>q.name===p.name&&dist(q.lat,q.lng,p.lat,p.lng)<500);if(j<0)out.push(p);else if(PRI(p)<PRI(out[j]))out[j]={...p,d:out[j].d}}
+  return out.slice(0,n)}
 // 逐檔載入：每到一檔就併入地圖與附近清單（大檔不阻塞畫面）
 let lastPos=null,rebuildT;
 async function loadData(){const idx=await (await fetch('data/index.json')).json();
@@ -42,7 +45,7 @@ function render(lat,lng,label,quiet){
       ((p.features||p.reason||p.openTime||(p.history||"").length>130)?`<button class="toggle">展開更多 ▾</button>`:'')+`<div class="links">${p.source?`<a href="${esc(p.source)}" target="_blank" rel="noopener">原始資料</a>`:''}<a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" rel="noopener">導航前往</a></div>`;
     const t=c.querySelector('.toggle');if(t)t.onclick=()=>{c.classList.toggle('open');t.textContent=c.classList.contains('open')?'收合 ▴':'展開更多 ▾'};
     const btn=document.createElement('button');btn.className='play';btn.textContent='▶ 播放語音';btn.onclick=()=>toggleSpeak(p,btn);c.appendChild(btn);list.appendChild(c)});
-  map.fitBounds(b,{padding:[30,30],maxZoom:16});if(!quiet)document.querySelector('.mapwrap').scrollIntoView({behavior:'smooth'})}
+  map.fitBounds(L.latLng(lat,lng).toBounds(1600).extend(L.latLngBounds(b)),{padding:[20,20],maxZoom:15});if(!quiet)document.querySelector('.mapwrap').scrollIntoView({behavior:'smooth'})}
 function locate(){const st=document.getElementById('status');
   if(!navigator.geolocation){st.textContent='無法定位，請選擇城市或點地圖';showFallback();return}
   st.textContent='正在取得你的位置…';
@@ -51,7 +54,7 @@ function showFallback(){document.getElementById('city').focus()}
 async function init(){
   map=L.map('map',{zoomControl:false}).setView([23.7,121],7);L.control.zoom({position:'bottomright'}).addTo(map);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap 貢獻者'}).addTo(map);
-  cluster=L.markerClusterGroup({chunkedLoading:true,maxClusterRadius:50,showCoverageOnHover:false});map.addLayer(cluster);numLayer=L.layerGroup().addTo(map);
+  cluster=L.markerClusterGroup({chunkedLoading:true,maxClusterRadius:40,disableClusteringAtZoom:15,spiderfyOnMaxZoom:false,showCoverageOnHover:false});map.addLayer(cluster);numLayer=L.layerGroup().addTo(map);
   map.on('click',e=>render(e.latlng.lat,e.latlng.lng,'地圖選點'));
   const sel=document.getElementById('city');Object.keys(CITIES).forEach(k=>sel.add(new Option(k,k)));sel.onchange=()=>{if(sel.value)render(...CITIES[sel.value],sel.value)};
   document.getElementById('locBtn').onclick=locate;
