@@ -54,7 +54,7 @@ function showFallback(){document.getElementById('city').focus()}
 async function init(){
   map=L.map('map',{zoomControl:false}).setView([23.7,121],7);L.control.zoom({position:'bottomright'}).addTo(map);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap 貢獻者'}).addTo(map);
-  cluster=L.markerClusterGroup({chunkedLoading:true,maxClusterRadius:40,disableClusteringAtZoom:15,spiderfyOnMaxZoom:false,showCoverageOnHover:false});map.addLayer(cluster);numLayer=L.layerGroup().addTo(map);
+  cluster=L.markerClusterGroup({chunkedLoading:true,maxClusterRadius:40,disableClusteringAtZoom:14,spiderfyOnMaxZoom:false,showCoverageOnHover:false});map.addLayer(cluster);numLayer=L.layerGroup().addTo(map);
   map.on('click',e=>render(e.latlng.lat,e.latlng.lng,'地圖選點'));
   const sel=document.getElementById('city');Object.keys(CITIES).forEach(k=>sel.add(new Option(k,k)));sel.onchange=()=>{if(sel.value)render(...CITIES[sel.value],sel.value)};
   document.getElementById('locBtn').onclick=locate;
