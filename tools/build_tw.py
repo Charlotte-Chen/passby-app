@@ -11,13 +11,14 @@ for c,label in cats.items():
     if not(21.5<lat<26.5 and 118<lng<122.5) or x['caseId'] in seen: continue
     seen.add(x['caseId'])
     a=(x.get('addresses') or [{}])[0]
-    img=(x.get('representImage') or {}).get('transform',{}) if isinstance(x.get('representImage'),dict) else {}
+    ri=x.get('representImage') if isinstance(x.get('representImage'),dict) else {}
+    img=(ri.get('transform') or {}).get('c') or ri.get('original') or ''
     out.append({'id':'tw-'+x['caseId'],'country':'TW','region':a.get('cityName',''),'district':a.get('distName',''),
       'name':x['caseName'].strip(),'category':label,'level':x.get('assetsClassifyName') or label,
       'types':[t['name'] for t in x.get('assetsTypes') or []],'lat':round(lat,6),'lng':round(lng,6),
       'address':(a.get('cityName','')+a.get('distName','')+a.get('address','')).strip(),
       'history':clean(x.get('pastHistory'))[:1500],'features':clean(x.get('buildingFeatures'))[:600],
       'reason':clean(x.get('registerReason'))[:400],'openTime':clean(x.get('openUpTime')),
-      'source':x.get('caseUrl','').replace('http://','https://')})
+      'image':img,'source':x.get('caseUrl','').replace('http://','https://')})
 json.dump({'country':'TW','name':'臺灣','source':'文化部文化資產局 開放資料 (data.boch.gov.tw, 政府資料開放授權條款第1版)','places':out},open('data/tw.json','w'),ensure_ascii=False,separators=(',',':'))
 print(len(out),{v:sum(p['category']==v for p in out) for v in cats.values()})
