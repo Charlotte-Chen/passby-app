@@ -18,14 +18,13 @@ function textOf(p){return [p.name+'。',p.history&&((p.historyLabel||'歷史沿�
 // 語音朗讀（Web Speech API，zh-TW）
 // ===== 語音朗讀（僅用免費 Web Speech API）=====
 const SS=typeof window!=='undefined'?window.speechSynthesis:null;
-const PREF=JSON.parse((typeof localStorage!=='undefined'&&localStorage.getItem('voicePrefs'))||'{}');
+const PREF={};
 let voices=[],speakingId=null,cur=null; // cur={p,btn,card,chunks,i,paused}
 function scoreVoice(v){let s=0;const l=v.lang.replace('_','-').toLowerCase(),n=v.name;
   if(l==='zh-tw'||/taiwan|臺灣|台灣/i.test(n))s+=100;else if(l==='zh-hk'||l==='yue-hk')s+=60;else if(l==='zh-cn'||l.startsWith('cmn'))s+=50;else if(l.startsWith('zh'))s+=40;else return -1;
   if(/enhanced|premium|高品質|增強|natural|neural|online/i.test(n))s+=30;if(/google|microsoft/i.test(n))s+=15;if(/mei-?jia|hsiaochen|hsiaoyu|yating|zhiwei/i.test(n))s+=10;if(v.localService)s+=2;return s}
 function loadVoices(){if(!SS)return;voices=SS.getVoices().filter(v=>scoreVoice(v)>=0).sort((a,b)=>scoreVoice(b)-scoreVoice(a));fillVoiceSelect()}
 function pickVoice(){return voices.find(v=>v.voiceURI===PREF.voice)||voices[0]||null}
-function savePrefs(){localStorage.setItem('voicePrefs',JSON.stringify(PREF))}
 // 朗讀前清理文字
 function cleanForSpeech(t){return t.replace(/https?:\/\/\S+/g,'').replace(/[（(]\s*[)）]/g,'').replace(/[「」『』【】〈〉《》"“”]/g,'')
   .replace(/(\d{3,4})\s*[-–~～]\s*(\d{3,4})\s*年/g,'$1年到$2年').replace(/(\d+)\s*%/g,'百分之$1').replace(/(\d)\s*m\b/g,'$1公尺').replace(/(\d)\s*km\b/gi,'$1公里')
@@ -38,7 +37,7 @@ function setBtn(btn,state){btn.classList.toggle('on',state!=='idle');btn.textCon
 function showLine(){if(!cur)return;const el=cur.card.querySelector('.reading');el.hidden=false;el.innerHTML=`<span class="rd-n">${cur.i+1}/${cur.chunks.length}</span>${esc(cur.chunks[cur.i]||'')}`}
 function speakNext(){if(!cur||cur.paused)return;if(cur.i>=cur.chunks.length){stopSpeak();return}
   showLine();const me=cur,u=new SpeechSynthesisUtterance(cur.chunks[cur.i]);const v=pickVoice();if(v){u.voice=v;u.lang=v.lang}else u.lang='zh-TW';
-  u.rate=PREF.rate||1;u.pitch=PREF.pitch||1;
+  u.rate=1;u.pitch=1;
   u.onend=()=>{if(cur!==me||me.paused)return;me.i++;setTimeout(speakNext,/[。！？\n]$/.test(u.text)?250:80)};
   u.onerror=e=>{if(cur!==me||me.paused||e.error==='interrupted'||e.error==='canceled')return;me.i++;speakNext()};
   SS.speak(u)}
@@ -50,18 +49,8 @@ function toggleSpeak(p,btn){
   stopSpeak();if(!voices.length)loadVoices();
   cur={p,btn,card:btn.closest('.card'),chunks:chunk(textOf(p)),i:0,paused:false};speakingId=p.id;setBtn(btn,'play');
   SS.cancel();setTimeout(speakNext,60)}
-// 設定面板
-function fillVoiceSelect(){const sel=document.getElementById('vVoice');if(!sel)return;sel.innerHTML='';
-  if(!voices.length){sel.add(new Option('（找不到中文語音，使用系統預設）',''));return}
-  voices.forEach(v=>sel.add(new Option(`${v.name}（${v.lang}）`,v.voiceURI)));sel.value=(pickVoice()||{}).voiceURI||''}
+function fillVoiceSelect(){}
 function initVoiceUI(){if(!SS)return;loadVoices();SS.onvoiceschanged=loadVoices;[250,1000,3000].forEach(t=>setTimeout(()=>{if(!voices.length)loadVoices()},t));
-  const d=document.getElementById('vDlg'),r=document.getElementById('vRate'),pi=document.getElementById('vPitch');
-  r.value=PREF.rate||1;pi.value=PREF.pitch||1;const lab=()=>{document.getElementById('vRateV').textContent=(+r.value).toFixed(1)+'×';document.getElementById('vPitchV').textContent=(+pi.value).toFixed(1)};lab();
-  document.getElementById('setBtn').onclick=()=>{loadVoices();d.showModal?d.showModal():d.setAttribute('open','')};
-  document.getElementById('vClose').onclick=()=>d.close?d.close():d.removeAttribute('open');
-  document.getElementById('vVoice').onchange=e=>{PREF.voice=e.target.value;savePrefs()};
-  r.oninput=()=>{PREF.rate=+r.value;savePrefs();lab()};pi.oninput=()=>{PREF.pitch=+pi.value;savePrefs();lab()};
-  document.getElementById('vTest').onclick=()=>{stopSpeak();const u=new SpeechSynthesisUtterance('你好，這是目前選擇的語音。');const v=pickVoice();if(v){u.voice=v;u.lang=v.lang}else u.lang='zh-TW';u.rate=PREF.rate||1;u.pitch=PREF.pitch||1;SS.speak(u)};
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&cur&&!cur.paused&&/iPhone|iPad/.test(navigator.userAgent)){cur.paused=true;SS.cancel();setBtn(cur.btn,'pause')}})}
 
 const COLORS={'古蹟':'#b8322a','歷史建築':'#2f5d3a','紀念建築':'#8c6d1f','聚落建築群':'#6b4a7a','考古遺址':'#7a5233','文化景觀':'#5f8a2e','史蹟':'#9c2f55','博物館與文化館':'#2d5b7c','觀光景點':'#c48a12','地名':'#4f8fa8'};const col=p=>COLORS[p.category]||'#55606a';
