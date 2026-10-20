@@ -1,22 +1,24 @@
 <!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>身邊的老故事｜全台文化資產地圖</title><meta name="theme-color" content="#0b2230">
+<title>身邊的老故事｜全台文化資產地圖</title><meta name="theme-color" content="#2f5d3a">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.svg"><meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;800&family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"><link rel="stylesheet" href="style.css"></head><body>
-<header class="bar"><span class="logo">●</span><b>身邊的老故事</b><a href="#about">資料說明</a></header>
-<section class="hero">
-  <p class="kicker">走到哪裡，聽到哪裡</p>
-  <h1>腳下這塊地，<br>藏著哪些老故事？</h1>
-  <p class="lead">打開就定位，找出離你最近的十處古蹟、歷史建築、考古遺址、博物館、觀光景點與地名由來，文字可閱讀，也能一鍵朗讀。位置只在你的手機上計算。</p>
-  <div class="panel">
-    <button id="locBtn" class="cta">◎　用我的位置找附近</button>
-    <div class="or"><span>或</span></div>
-    <label>選擇縣市<select id="city"><option value="">— 請選擇 —</option></select></label>
-    <p class="hint">也可以直接點地圖上的任何位置。</p>
-  </div>
+<header class="top">
+  <div class="stamp">踏<br>查</div>
+  <div class="ttl"><small>FIELD NOTES OF TAIWAN</small><b>身邊的老故事</b></div>
+  <a href="#about" class="info">ⓘ</a>
+</header>
+<section class="ticket">
+  <div class="tk-row"><span class="tk-lbl">起站</span><span class="tk-lbl">目的</span></div>
+  <div class="tk-row big"><span>現在地</span><span class="arrow">→</span><span>附近十處</span></div>
+  <p class="tk-note">古蹟・歷史建築・遺址・博物館・景點・地名<br>文字可讀，亦可朗讀。定位只在本機計算。</p>
+  <button id="locBtn" class="cta">定位　出發</button>
+  <div class="tk-perf"></div>
+  <label class="tk-city">或選縣市<select id="city"><option value="">— 請選擇 —</option></select></label>
+  <p class="hint">也可以直接點地圖上的任何位置。</p>
 </section>
 <section class="mapwrap">
   <div class="chips" id="chips"></div>

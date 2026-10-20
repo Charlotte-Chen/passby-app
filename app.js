@@ -27,7 +27,7 @@ function toggleSpeak(p,btn){
   speakingId=p.id;btn.textContent='⏸ 暫停';btn.classList.add('on');
   chunks.forEach((t,i)=>{const u=new SpeechSynthesisUtterance(t);u.lang='zh-TW';const v=zhVoice();if(v)u.voice=v;u.rate=1;
     if(i===chunks.length-1)u.onend=()=>{if(speakingId===p.id){speakingId=null;btn.textContent='▶ 播放語音';btn.classList.remove('on')}};speechSynthesis.speak(u)})}
-const COLORS={'古蹟':'#d2592a','歷史建築':'#1d6b6f','紀念建築':'#b0832b','聚落建築群':'#7a4f86','考古遺址':'#8a5a3c','文化景觀':'#4f8a3c','史蹟':'#a33b5c','博物館與文化館':'#2c4f8f','觀光景點':'#e09a1a','地名':'#5a8fc7'};const col=p=>COLORS[p.category]||'#55606a';
+const COLORS={'古蹟':'#b8322a','歷史建築':'#2f5d3a','紀念建築':'#8c6d1f','聚落建築群':'#6b4a7a','考古遺址':'#7a5233','文化景觀':'#5f8a2e','史蹟':'#9c2f55','博物館與文化館':'#2d5b7c','觀光景點':'#c48a12','地名':'#4f8fa8'};const col=p=>COLORS[p.category]||'#55606a';
 let cluster,numLayer,active=new Set(Object.keys(COLORS));
 function buildCluster(){cluster.clearLayers();const ms=[];places.forEach(p=>{if(!active.has(p.category))return;
   const m=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:`<div class="pin" style="--c:${col(p)}"></div>`,iconSize:[14,14]})});
