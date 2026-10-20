@@ -1,1 +1,1 @@
-{"countries":[{"code":"TW","name":"臺灣","files":["data/tw.json","data/tw-placenames.json"]}]}
+{"countries":[{"code":"TW","name":"臺灣","files":["data/tw-museums.json","data/tw-heritage-more.json","data/tw.json","data/tw-attractions.json","data/tw-placenames.json"]}]}

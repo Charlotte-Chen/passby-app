@@ -35,3 +35,4 @@ footer{background:var(--ink);color:#cfd8d6;padding:24px 20px 40px;font-size:13px
 @media(min-width:760px){.hero,.mapwrap,.results{max-width:760px;margin:0 auto}}
 .leaflet-tile-pane{filter:sepia(.25) saturate(.8) contrast(.95)}
 .photo{display:block;width:calc(100% + 36px);margin:14px -18px 4px;aspect-ratio:16/9;object-fit:cover;background:var(--paper2)}
+.card:not(.open) h3:first-of-type+p{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
