@@ -1,12 +1,30 @@
 <!doctype html><html lang="zh-Hant-TW"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>我經過了｜身邊的文化資產</title><meta name="theme-color" content="#7a4b2a">
+<title>身邊的老故事｜全台文化資產地圖</title><meta name="theme-color" content="#0b2230">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.svg"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;800&family=Noto+Sans+TC:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="style.css"></head><body>
-<header><h1>我經過了</h1><button id="locBtn">📍 重新定位</button></header>
-<div id="status">正在取得你的位置…</div>
-<div id="fallback" hidden><select id="city"><option value="">選擇城市…</option></select><span>或直接點地圖選位置</span></div>
-<div id="map"></div><main id="list"></main>
-<footer>資料來源：文化部文化資產局開放資料（政府資料開放授權條款第1版）。位置只在本機計算，不會上傳。</footer>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="app.js"></script></body></html>
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"><link rel="stylesheet" href="style.css"></head><body>
+<header class="bar"><span class="logo">●</span><b>身邊的老故事</b><a href="#about">資料說明</a></header>
+<section class="hero">
+  <p class="kicker">走到哪裡，聽到哪裡</p>
+  <h1>腳下這塊地，<br>藏著哪些老故事？</h1>
+  <p class="lead">打開就定位，找出離你最近的五處古蹟與歷史建築，文字可閱讀，也能一鍵朗讀。位置只在你的手機上計算。</p>
+  <div class="panel">
+    <button id="locBtn" class="cta">◎　用我的位置找附近</button>
+    <div class="or"><span>或</span></div>
+    <label>選擇縣市<select id="city"><option value="">— 請選擇 —</option></select></label>
+    <p class="hint">也可以直接點地圖上的任何位置。</p>
+  </div>
+</section>
+<section class="mapwrap">
+  <div class="chips" id="chips"></div>
+  <div id="map"></div>
+  <p class="count" id="mapcount"></p>
+</section>
+<section class="results"><p class="status" id="status">等待定位…</p><div id="list"></div></section>
+<footer id="about"><h2>資料說明</h2><p>地點與文字皆來自文化部文化資產局開放資料（古蹟、歷史建築、聚落建築群），依政府資料開放授權條款第1版使用。地圖 © OpenStreetMap 貢獻者。朗讀使用手機內建語音。</p></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="app.js"></script></body></html>

@@ -21,29 +21,40 @@ function toggleSpeak(p,btn){
   speakingId=p.id;btn.textContent='⏸ 暫停';btn.classList.add('on');
   chunks.forEach((t,i)=>{const u=new SpeechSynthesisUtterance(t);u.lang='zh-TW';const v=zhVoice();if(v)u.voice=v;u.rate=1;
     if(i===chunks.length-1)u.onend=()=>{if(speakingId===p.id){speakingId=null;btn.textContent='▶ 播放語音';btn.classList.remove('on')}};speechSynthesis.speak(u)})}
+const COLORS={'古蹟':'#d2592a','歷史建築':'#1d6b6f','聚落建築群':'#7a4f86'};const col=p=>COLORS[p.category]||'#55606a';
+let cluster,numLayer,active=new Set(Object.keys(COLORS));
+function buildCluster(){cluster.clearLayers();const ms=[];places.forEach(p=>{if(!active.has(p.category))return;
+  const m=L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:`<div class="pin" style="--c:${col(p)}"></div>`,iconSize:[14,14]})});
+  m.bindPopup(()=>`<b>${esc(p.name)}</b><br>${esc(p.level)}<br><a href="#" onclick="render(${p.lat},${p.lng},'${esc(p.name).replace(/'/g,'')}');return false">看這裡附近</a>`);ms.push(m)});
+  cluster.addLayers(ms);document.getElementById('mapcount').textContent=`地圖上共 ${ms.length.toLocaleString()} 處文化資產（放大可展開）`}
 function render(lat,lng,label){
-  speechSynthesis?.cancel?.();speakingId=null;
-  const near=nearest(lat,lng);document.getElementById('status').textContent=`${label}附近最近的 ${near.length} 處文化資產（共 ${places.length} 處資料）`;
-  if(meMarker)meMarker.remove();meMarker=L.circleMarker([lat,lng],{radius:8,color:'#1565c0',fillOpacity:.8}).addTo(map);
-  layer.clearLayers();const b=[[lat,lng]];
-  const list=document.getElementById('list');list.innerHTML='';
-  near.forEach((p,i)=>{b.push([p.lat,p.lng]);L.marker([p.lat,p.lng]).addTo(layer).bindPopup(`${i+1}. ${esc(p.name)}`);
-    const c=document.createElement('article');c.className='card';
-    c.innerHTML=`<h2>${i+1}. ${esc(p.name)}</h2><div class="meta">${esc(p.level)}｜${esc(p.types.join('、'))}｜距離 ${fmt(p.d)}<br>${esc(p.address)}</div>`+
-      (p.history?`<h3>歷史沿革</h3><p>${esc(p.history)}</p>`:'')+(p.features?`<h3>建築特色</h3><p>${esc(p.features)}</p>`:'')+(p.reason?`<h3>指定／登錄理由</h3><p>${esc(p.reason)}</p>`:'')+
-      (p.openTime?`<div class="meta">開放時間：${esc(p.openTime)}</div>`:'')+`<div class="meta"><a href="${esc(p.source)}" target="_blank" rel="noopener">國家文化資產網原始資料</a>｜<a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank">導航</a></div>`;
+  window.speechSynthesis&&speechSynthesis.cancel();speakingId=null;
+  const near=nearest(lat,lng);document.getElementById('status').textContent=`離${label}最近的 ${near.length} 處`;
+  if(meMarker)meMarker.remove();meMarker=L.marker([lat,lng],{icon:L.divIcon({className:'',html:'<div class="me"></div>',iconSize:[18,18]}),zIndexOffset:1000}).addTo(map);
+  numLayer.clearLayers();const b=[[lat,lng]];const list=document.getElementById('list');list.innerHTML='';
+  near.forEach((p,i)=>{b.push([p.lat,p.lng]);L.marker([p.lat,p.lng],{zIndexOffset:900,icon:L.divIcon({className:'',html:`<div class="pin num">${i+1}</div>`,iconSize:[28,28]})}).addTo(numLayer).on('click',()=>document.getElementById('c'+i).scrollIntoView({behavior:'smooth'}));
+    const c=document.createElement('article');c.className='card';c.id='c'+i;c.style.setProperty('--c',col(p));
+    c.innerHTML=`<h2><span class="no">${i+1}</span>${esc(p.name)}</h2><div class="tags"><span class="tag dist">${fmt(p.d)}</span><span class="tag">${esc(p.level)}</span>${p.types.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="addr">${esc(p.address)}</div>`+
+      (p.history?`<h3>歷史沿革</h3><p>${esc(p.history)}</p>`:'')+`<div class="more">`+(p.features?`<h3>建築特色</h3><p>${esc(p.features)}</p>`:'')+(p.reason?`<h3>指定／登錄理由</h3><p>${esc(p.reason)}</p>`:'')+(p.openTime?`<h3>開放時間</h3><p>${esc(p.openTime)}</p>`:'')+`</div>`+
+      ((p.features||p.reason||p.openTime)?`<button class="toggle">展開更多 ▾</button>`:'')+`<div class="links"><a href="${esc(p.source)}" target="_blank" rel="noopener">原始資料</a><a href="https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}" target="_blank" rel="noopener">導航前往</a></div>`;
+    const t=c.querySelector('.toggle');if(t)t.onclick=()=>{c.classList.toggle('open');t.textContent=c.classList.contains('open')?'收合 ▴':'展開更多 ▾'};
     const btn=document.createElement('button');btn.className='play';btn.textContent='▶ 播放語音';btn.onclick=()=>toggleSpeak(p,btn);c.appendChild(btn);list.appendChild(c)});
-  map.fitBounds(b,{padding:[30,30],maxZoom:16})}
+  map.fitBounds(b,{padding:[30,30],maxZoom:16});document.querySelector('.mapwrap').scrollIntoView({behavior:'smooth'})}
 function locate(){const st=document.getElementById('status');
   if(!navigator.geolocation){st.textContent='無法定位，請選擇城市或點地圖';showFallback();return}
   st.textContent='正在取得你的位置…';
   navigator.geolocation.getCurrentPosition(p=>render(p.coords.latitude,p.coords.longitude,'你'),()=>{st.textContent='未取得定位權限，請選擇城市或點地圖';showFallback()},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})}
-function showFallback(){document.getElementById('fallback').hidden=false}
+function showFallback(){document.getElementById('city').focus()}
 async function init(){
-  map=L.map('map').setView([23.7,121],7);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map);layer=L.layerGroup().addTo(map);
+  map=L.map('map',{zoomControl:false}).setView([23.7,121],7);L.control.zoom({position:'bottomright'}).addTo(map);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap 貢獻者'}).addTo(map);
+  cluster=L.markerClusterGroup({chunkedLoading:true,maxClusterRadius:50,showCoverageOnHover:false});map.addLayer(cluster);numLayer=L.layerGroup().addTo(map);
   map.on('click',e=>render(e.latlng.lat,e.latlng.lng,'地圖選點'));
   const sel=document.getElementById('city');Object.keys(CITIES).forEach(k=>sel.add(new Option(k,k)));sel.onchange=()=>{if(sel.value)render(...CITIES[sel.value],sel.value)};
   document.getElementById('locBtn').onclick=locate;
-  await loadData();locate();
+  const ch=document.getElementById('chips');Object.entries(COLORS).forEach(([k,v])=>{const b=document.createElement('button');b.className='chip on';b.style.setProperty('--c',v);b.textContent=k;
+    b.onclick=()=>{active.has(k)?active.delete(k):active.add(k);b.classList.toggle('on');buildCluster()};ch.appendChild(b)});
+  await loadData();buildCluster();locate();
   if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')}
+if(typeof window!=="undefined")window.render=render;
 if(typeof window!=='undefined'&&typeof module==='undefined')init();else module.exports={dist,nearest,textOf};
