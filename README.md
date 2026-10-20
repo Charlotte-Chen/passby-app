@@ -26,3 +26,13 @@ app.js 會載入所有國家檔並一起算最近距離。
 
 ## 部署
 任何靜態空間皆可（GitHub Pages、Netlify、Cloudflare Pages）。需 HTTPS 才能定位。
+
+## 目前類別與資料檔（臺灣）
+| 檔案 | 類別 | 來源 |
+|---|---|---|
+| data/tw.json | 古蹟、歷史建築、聚落建築群 | 文資局 assetsCase 1.1/1.2/1.3 |
+| data/tw-heritage-more.json | 紀念建築、考古遺址、文化景觀、史蹟 | 文資局 assetsCase 1.4/2.1/3.1/3.2（tools/build_tw_more.py） |
+| data/tw-museums.json | 博物館與文化館 | 文化部文化地圖 emap typeId=H、C |
+| data/tw-attractions.json | 觀光景點 | 觀光署 觀光資訊資料庫 Attraction-json.zip（data.gov.tw/dataset/7777） |
+| data/tw-placenames.json | 地名 | 內政部地政司 臺灣地區地名資料 |
+各檔逐一非同步載入，載入一檔就更新地圖與清單。
